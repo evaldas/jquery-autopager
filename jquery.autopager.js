@@ -11,6 +11,7 @@
     $.autopager = function(options) {
         var nextPageUrl;
         var requestedPages = [location.href];
+        var loading = false;
         if ($.browser.msie) {
              var scrollTopElement = $('html');
              var heightElement = $(document);
@@ -29,12 +30,14 @@
         setNextPageUrl();
 
         $(window).scroll(function(){
-            if (nextPageUrl && $.inArray(nextPageUrl, requestedPages) < 0 && scrollHeightRemain() < options.pagingPoint) {
+            if (!loading && nextPageUrl && $.inArray(nextPageUrl, requestedPages) < 0 && scrollHeightRemain() < options.pagingPoint) {
+                loading = true;
                 requestedPages.push(nextPageUrl);
                 $.get(nextPageUrl, function(data){
                     var nextPage = $('<div/>').html(data);
                     setNextPageUrl(nextPage);
                     insertPageElement(nextPage);
+                    loading = false;
                 });
             }
         });
