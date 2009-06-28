@@ -5,7 +5,7 @@
  * Dual licensed under the MIT and GPL licenses.
  *
  * @auther  lagos
- * @version 0.1.0
+ * @version 0.1.1
  */
 (function($) {
     $.autopager = function(options) {
@@ -22,6 +22,7 @@
         options = $.extend({
             insertBefore: $(options.pageElement).next(),
             pagingPoint: 350,
+            load: function() {},
             success: function() {}
         }, options);
 
@@ -34,7 +35,6 @@
                     var nextPage = $('<div/>').html(data);
                     setNextPageUrl(nextPage);
                     insertPageElement(nextPage);
-                    options.success(requestedPages.length);
                 });
             }
         });
@@ -49,7 +49,11 @@
 
         function insertPageElement(context) {
             var pageElement = $(options.pageElement, context); 
-            if (pageElement) pageElement.insertBefore(options.insertBefore);
+            if (pageElement) {
+                options.load.call(pageElement, requestedPages.length);
+                pageElement.insertBefore(options.insertBefore);
+                options.success.call(pageElement, requestedPages.length);
+            }
         }
 
         function scrollHeightRemain() {
