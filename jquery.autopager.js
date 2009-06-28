@@ -8,7 +8,7 @@
  * @version 0.1.0
  */
 (function($) {
-    $.autoPager = function(options) {
+    $.autopager = function(options) {
         var nextPageUrl;
         var requestedPages = [location.href];
         if ($.browser.msie) {
